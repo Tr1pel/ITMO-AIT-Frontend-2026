@@ -1,0 +1,68 @@
+{
+  "users": [
+    {
+      "id": "user_1001",
+      "name": "Иван Петров",
+      "email": "buyer@example.com",
+      "phone": "+7 (901) 111-22-33",
+      "password": "123456",
+      "accountType": "buyer",
+      "tickets": [],
+      "refunds": [],
+      "organizerEvents": []
+    },
+    {
+      "id": "user_1002",
+      "name": "ООО Концерт Продакшн",
+      "email": "organizer@example.com",
+      "phone": "+7 (901) 444-55-66",
+      "password": "123456",
+      "accountType": "organizer",
+      "tickets": [],
+      "refunds": [],
+      "organizerEvents": []
+    },
+    {
+      "id": "user_1775747013309_4e29",
+      "name": "Хочу",
+      "email": "test@gmail.com",
+      "phone": "+79056424593",
+      "password": "123456789",
+      "accountType": "buyer",
+      "tickets": [
+        {
+          "id": "EP-547090",
+          "category": "Концерт",
+          "eventName": "Neon Lights Live",
+          "date": "14 мая 2026",
+          "city": "Москва",
+          "seat": "Сектор A, ряд 4, место 12",
+          "price": 1900,
+          "status": "paid",
+          "canRefund": true
+        },
+        {
+          "id": "EP-488011",
+          "category": "Концерт",
+          "eventName": "Symphonic Cinema Night",
+          "date": "21 апреля 2026",
+          "city": "Москва",
+          "seat": "Сектор B, ряд 3, место 10",
+          "price": 2500,
+          "status": "paid",
+          "canRefund": false
+        }
+      ],
+      "refunds": [
+        {
+          "ticketId": "EP-488011",
+          "eventName": "Symphonic Cinema Night",
+          "requestedAt": "09.04.2026",
+          "amount": 2500,
+          "status": "processing"
+        }
+      ],
+      "organizerEvents": []
+    }
+  ]
+}

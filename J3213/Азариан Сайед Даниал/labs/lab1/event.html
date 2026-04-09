@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -23,9 +23,15 @@
         <div class="collapse navbar-collapse" id="eventNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item"><a class="nav-link" href="index.html">Главная</a></li>
-            <li class="nav-item"><a class="nav-link active" aria-current="page" href="event.html">Мероприятие</a></li>
+            <li class="nav-item"><a class="nav-link active" aria-current="page" id="eventNavCurrentLink" href="event.html">Мероприятие</a></li>
           </ul>
-          <a class="btn btn-outline-primary" href="auth.html">Вход</a>
+          <div class="d-flex gap-2" id="guestNavActions">
+            <a class="btn btn-outline-primary" href="auth.html">Вход</a>
+            <a class="btn btn-primary" href="auth.html">Регистрация</a>
+          </div>
+          <div class="d-none" id="userNavActions">
+            <a class="btn btn-primary" href="profile.html" id="userCabinetLink">Личный кабинет</a>
+          </div>
         </div>
       </div>
     </nav>
@@ -41,22 +47,24 @@
               alt="Афиша мероприятия"
               class="w-100 h-100"
               style="min-height: 280px; object-fit: cover;"
+              id="eventPoster"
             >
           </div>
           <div class="col-lg-7 p-4">
-            <p class="small text-secondary mb-2">Концерт • 21 апреля 2026 • 19:00</p>
-            <h1 class="h3 mb-3">Symphonic Cinema Night</h1>
-            <p class="mb-3">Большой концерт-саундтрек: живой оркестр исполнит музыку из культовых фильмов на большом экране.</p>
+            <p class="small text-secondary mb-2" id="eventMeta">Концерт • 21 апреля 2026 • 19:00</p>
+            <h1 class="h3 mb-3" id="eventTitle">Symphonic Cinema Night</h1>
+            <p class="mb-3" id="eventDescription">Большой концерт-саундтрек: живой оркестр исполнит музыку из культовых фильмов на большом экране.</p>
             <ul class="list-unstyled small text-secondary mb-4">
-              <li>Город: Москва</li>
-              <li>Площадка: Vegas City Hall</li>
-              <li>Возрастное ограничение: 12+</li>
+              <li id="eventCityLine">Город: Москва</li>
+              <li id="eventVenueLine">Площадка: Vegas City Hall</li>
+              <li id="eventAgeLine">Возрастное ограничение: 12+</li>
             </ul>
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-              <span class="h5 m-0">от 2 500 ₽</span>
+              <span class="h5 m-0" id="eventPriceLabel">от 2 500 ₽</span>
               <button
                 type="button"
                 class="btn btn-primary buy-ticket-btn"
+                id="eventBuyButton"
                 data-event-name="Symphonic Cinema Night"
                 data-category="Концерт"
                 data-date="21 апреля 2026"
@@ -75,18 +83,19 @@
         <div class="col-lg-6">
           <section class="cabinet-card p-4 h-100">
             <h2 class="h5 mb-3">Место проведения</h2>
-            <p class="mb-2">Vegas City Hall, Москва, 66-й км МКАД, Крокус Сити</p>
-            <p class="text-secondary small mb-0">Рядом метро «Мякинино», удобный вход с набережной и подземная парковка.</p>
+            <p class="mb-2" id="eventVenueAddress">Vegas City Hall, Москва, 66-й км МКАД, Крокус Сити</p>
+            <p class="text-secondary small mb-0" id="eventVenueDetails">Рядом метро «Мякинино», удобный вход с набережной и подземная парковка.</p>
           </section>
         </div>
         <div class="col-lg-6">
           <section class="cabinet-card p-4 h-100">
-            <h2 class="h5 mb-3">Зал</h2>
+            <h2 class="h5 mb-3">Схема зала</h2>
             <img
               src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1000&q=80"
-              alt="Зал"
+              alt="Схема зала"
               class="w-100 rounded"
               style="max-height: 240px; object-fit: cover;"
+              id="eventHallScheme"
             >
           </section>
         </div>
@@ -94,20 +103,7 @@
 
       <section class="cabinet-card p-4 mt-4">
         <h2 class="h5 mb-3">Отзывы</h2>
-        <div class="d-grid gap-3">
-          <article class="border rounded p-3">
-            <p class="mb-1 fw-semibold">Анна П.</p>
-            <p class="small text-secondary mb-0">Оркестр и визуал на экране были на высоте, атмосфера потрясающая.</p>
-          </article>
-          <article class="border rounded p-3">
-            <p class="mb-1 fw-semibold">Максим Л.</p>
-            <p class="small text-secondary mb-0">Отличная организация и хороший звук, рекомендую брать места ближе к центру.</p>
-          </article>
-          <article class="border rounded p-3">
-            <p class="mb-1 fw-semibold">Екатерина С.</p>
-            <p class="small text-secondary mb-0">Очень понравился подбор треков из фильмов, вечер прошел идеально.</p>
-          </article>
-        </div>
+        <div class="d-grid gap-3" id="eventReviewsList"></div>
       </section>
     </div>
   </main>
@@ -117,6 +113,8 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
-  <script src="script.js"></script>
+  <script src="JS/common.js"></script>
+  <script src="JS/home.js"></script>
+  <script src="JS/event.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -23,9 +23,6 @@
         <div class="collapse navbar-collapse" id="mainNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item"><a class="nav-link active" href="#">Главная</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Мероприятия</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Города</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Организаторам</a></li>
           </ul>
           <div class="d-flex gap-2" id="guestNavActions">
             <a class="btn btn-outline-primary" href="auth.html">Вход</a>
@@ -60,14 +57,15 @@
                 <div class="col-md-3">
                   <label class="form-label" for="searchCity">Город</label>
                   <select class="form-select" id="searchCity">
-                    <option selected>Москва</option>
-                    <option>Санкт-Петербург</option>
-                    <option>Казань</option>
-                    <option>Екатеринбург</option>
+                    <option value="" selected>Все города</option>
+                    <option value="Москва">Москва</option>
+                    <option value="Санкт-Петербург">Санкт-Петербург</option>
+                    <option value="Казань">Казань</option>
+                    <option value="Екатеринбург">Екатеринбург</option>
                   </select>
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
-                  <button class="btn btn-primary w-100" type="button">Найти</button>
+                  <button class="btn btn-primary w-100" id="searchEventsBtn" type="button">Найти</button>
                 </div>
               </div>
             </form>
@@ -79,7 +77,7 @@
               <p class="mb-4 text-secondary">Живой оркестр и музыка из легендарных фильмов. 21 апреля, 19:00, Vegas City Hall.</p>
               <div class="d-flex justify-content-between align-items-center">
                 <span class="fw-semibold">от 2 500 ₽</span>
-                <a class="btn btn-dark" href="event.html">Подробнее</a>
+                <a class="btn btn-dark" href="event.html?event=symphonic-cinema-night">Подробнее</a>
               </div>
             </div>
           </div>
@@ -90,16 +88,42 @@
     <section class="py-5">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-          <h2 class="h3 m-0">Популярные мероприятия</h2>
-          <a href="#" class="link-primary text-decoration-none">Смотреть все</a>
+          <h2 class="h3 m-0">Мероприятия</h2>
+          <a href="#" class="link-primary text-decoration-none d-none">Смотреть все</a>
         </div>
-        <div class="row g-4">
+        <div class="row g-4" id="eventsGrid">
+          <div class="col-sm-6 col-lg-4">
+            <article class="event-card h-100">
+              <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=800&q=80" class="event-card-img" alt="Симфонический концерт">
+              <div class="p-3">
+                <p class="small text-secondary mb-2">Концерт • 21 апреля • Москва</p>
+                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html?event=symphonic-cinema-night">Symphonic Cinema Night</a></h3>
+                <p class="text-secondary mb-3">Живой оркестр и музыка из легендарных фильмов в Vegas City Hall.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-semibold">от 2 500 ₽</span>
+                  <button
+                    class="btn btn-sm btn-outline-primary buy-ticket-btn"
+                    type="button"
+                    data-event-name="Symphonic Cinema Night"
+                    data-category="Концерт"
+                    data-date="21 апреля 2026"
+                    data-date-iso="2026-04-21"
+                    data-city="Москва"
+                    data-seat="Сектор B, ряд 3, место 10"
+                    data-price="2500"
+                  >
+                    Купить
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
           <div class="col-sm-6 col-lg-4">
             <article class="event-card h-100">
               <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80" class="event-card-img" alt="Концерт">
               <div class="p-3">
                 <p class="small text-secondary mb-2">Концерт • 14 мая • Москва</p>
-                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html">Neon Lights Live</a></h3>
+                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html?event=neon-lights-live">Neon Lights Live</a></h3>
                 <p class="text-secondary mb-3">Большое сольное шоу на ВТБ Арене.</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <span class="fw-semibold">от 1 900 ₽</span>
@@ -109,6 +133,7 @@
                     data-event-name="Neon Lights Live"
                     data-category="Концерт"
                     data-date="14 мая 2026"
+                    data-date-iso="2026-05-14"
                     data-city="Москва"
                     data-seat="Сектор A, ряд 4, место 12"
                     data-price="1900"
@@ -124,7 +149,7 @@
               <img src="https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=800&q=80" class="event-card-img" alt="Театр">
               <div class="p-3">
                 <p class="small text-secondary mb-2">Театр • 18 мая • Санкт-Петербург</p>
-                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html">Гамлет: Новая сцена</a></h3>
+                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html?event=hamlet-new-stage">Гамлет: Новая сцена</a></h3>
                 <p class="text-secondary mb-3">Современная постановка в Александринском театре.</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <span class="fw-semibold">от 1 200 ₽</span>
@@ -134,6 +159,7 @@
                     data-event-name="Гамлет: Новая сцена"
                     data-category="Театр"
                     data-date="18 мая 2026"
+                    data-date-iso="2026-05-18"
                     data-city="Санкт-Петербург"
                     data-seat="Партер, ряд 2, место 8"
                     data-price="1200"
@@ -149,7 +175,7 @@
               <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80" class="event-card-img" alt="Спорт">
               <div class="p-3">
                 <p class="small text-secondary mb-2">Спорт • 25 мая • Казань</p>
-                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html">Финал Лиги Городов</a></h3>
+                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html?event=city-league-final">Финал Лиги Городов</a></h3>
                 <p class="text-secondary mb-3">Решающий матч сезона на Ак Барс Арене.</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <span class="fw-semibold">от 1 500 ₽</span>
@@ -159,6 +185,7 @@
                     data-event-name="Финал Лиги Городов"
                     data-category="Спорт"
                     data-date="25 мая 2026"
+                    data-date-iso="2026-05-25"
                     data-city="Казань"
                     data-seat="Сектор C, ряд 6, место 18"
                     data-price="1500"
@@ -216,10 +243,10 @@
   <footer class="py-4 border-top bg-white">
     <div class="container">
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <p class="m-0 text-secondary">© 2026 EventPass. Учебный проект.</p>
+        <p class="m-0 text-secondary">EventPass</p>
         <div class="d-flex gap-3">
           <a href="#" class="text-secondary text-decoration-none">Помощь</a>
-          <a href="#" class="text-secondary text-decoration-none">Контакты</a>
+          <a href="https://t.me/Tr1pel" class="text-secondary text-decoration-none">Контакты</a>
           <a href="#" class="text-secondary text-decoration-none">Политика</a>
         </div>
       </div>
@@ -231,6 +258,9 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
-  <script src="script.js"></script>
+  <script src="JS/common.js"></script>
+  <script src="JS/home.js"></script>
 </body>
 </html>
+
+

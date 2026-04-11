@@ -1,4 +1,4 @@
-﻿function initAuthPage() {
+﻿async function initAuthPage() {
   const loginTab = document.getElementById("loginTab");
   const registerTab = document.getElementById("registerTab");
   const loginForm = document.getElementById("loginForm");
@@ -8,7 +8,7 @@
     return;
   }
 
-  const existingUser = getCurrentUser();
+  const existingUser = await getCurrentUser();
   if (existingUser) {
     window.location.href = getCabinetUrlForUser(existingUser);
     return;
@@ -17,11 +17,16 @@
   const authMessage = document.getElementById("authMessage");
   const loginEmail = document.getElementById("loginEmail");
   const loginPassword = document.getElementById("loginPassword");
+  const rememberMe = document.getElementById("rememberMe");
   const registerName = document.getElementById("registerName");
   const registerEmail = document.getElementById("registerEmail");
   const registerPhone = document.getElementById("registerPhone");
   const registerPassword = document.getElementById("registerPassword");
   const registerPasswordConfirm = document.getElementById("registerPasswordConfirm");
+
+  if (rememberMe) {
+    rememberMe.checked = isRememberMeEnabled();
+  }
 
   function showAuthMessage(text, type) {
     if (!authMessage) return;
@@ -104,6 +109,7 @@
 
     const email = loginEmail.value.trim().toLowerCase();
     const password = loginPassword.value;
+    const shouldRemember = !!(rememberMe && rememberMe.checked);
     const submitButton = loginForm.querySelector('button[type="submit"]');
 
     if (submitButton) submitButton.disabled = true;
@@ -111,9 +117,11 @@
     try {
       const response = await apiLogin(email, password);
       const user = response.user;
+      setCurrentUserId(user.id, { rememberMe: shouldRemember });
 
-      upsertUserInStorage(user);
-      setCurrentUserId(user.id);
+      if (shouldRemember) {
+        setRememberedUser(user);
+      }
 
       showAuthMessage("Вход выполнен успешно. Переходим в личный кабинет...", "success");
       setTimeout(() => {
@@ -157,8 +165,8 @@
       });
 
       const newUser = response.user;
-      upsertUserInStorage(newUser);
-      setCurrentUserId(newUser.id);
+      setCurrentUserId(newUser.id, { rememberMe: true });
+      setRememberedUser(newUser);
 
       showAuthMessage("Регистрация успешна. Переходим в личный кабинет...", "success");
       setTimeout(() => {

@@ -1,10 +1,10 @@
-﻿function initOrganizerPage() {
+﻿async function initOrganizerPage() {
   const organizerIdentity = document.getElementById("organizerIdentity");
   if (!organizerIdentity) {
     return;
   }
 
-  let currentUser = getCurrentUser();
+  let currentUser = await getCurrentUser();
   if (!currentUser) {
     window.location.href = "auth.html";
     return;
@@ -16,7 +16,6 @@
 
   if (!Array.isArray(currentUser.organizerEvents)) {
     currentUser.organizerEvents = [];
-    updateStoredUser(currentUser);
     persistUserToApi(currentUser).catch(() => {});
   }
 
@@ -113,7 +112,6 @@
 
     try {
       currentUser = await persistUserToApi(currentUser);
-      updateStoredUser(currentUser);
       renderOrganizerPage();
 
       createEventForm.reset();
@@ -141,3 +139,5 @@
 }
 
 initOrganizerPage();
+
+

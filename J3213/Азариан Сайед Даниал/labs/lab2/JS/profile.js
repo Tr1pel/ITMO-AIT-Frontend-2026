@@ -1,10 +1,10 @@
-﻿function initProfilePage() {
+﻿async function initProfilePage() {
   const profileName = document.getElementById("profileName");
   if (!profileName) {
     return;
   }
 
-  let currentUser = getCurrentUser();
+  let currentUser = await getCurrentUser();
   if (!currentUser) {
     window.location.href = "auth.html";
     return;
@@ -153,7 +153,6 @@
 
       try {
         currentUser = await persistUserToApi(currentUser);
-        updateStoredUser(currentUser);
         renderProfile();
 
         if (refundModal) refundModal.hide();
@@ -182,3 +181,5 @@
 }
 
 initProfilePage();
+
+

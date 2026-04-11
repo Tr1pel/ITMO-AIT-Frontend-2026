@@ -1,4 +1,4 @@
-﻿function initEventPage() {
+﻿async function initEventPage() {
   const title = document.getElementById("eventTitle");
   if (!title) {
     return;
@@ -112,13 +112,13 @@
     return date.toLocaleDateString("ru-RU");
   }
 
-  function getOrganizerEventData(eventId) {
+  async function getOrganizerEventData(eventId) {
     if (!eventId.startsWith("organizer-")) {
       return null;
     }
 
     const organizerEventId = decodeURIComponent(eventId.slice("organizer-".length));
-    const users = loadUsers();
+    const users = await getOrganizerUsersFromApi();
 
     for (const user of users) {
       if (user.accountType !== "organizer" || !Array.isArray(user.organizerEvents)) {
@@ -161,7 +161,7 @@
 
   const params = new URLSearchParams(window.location.search);
   const eventId = params.get("event") || "symphonic-cinema-night";
-  const organizerEventData = getOrganizerEventData(eventId);
+  const organizerEventData = await getOrganizerEventData(eventId);
   const eventData = organizerEventData || EVENT_CATALOG[eventId] || EVENT_CATALOG["symphonic-cinema-night"];
 
   const eventMeta = document.getElementById("eventMeta");
@@ -205,6 +205,11 @@
     eventBuyButton.dataset.city = eventData.city;
     eventBuyButton.dataset.seat = eventData.seatForPurchase;
     eventBuyButton.dataset.price = String(eventData.price);
+
+    const actions = window.EventPassHome && window.EventPassHome.actions;
+    if (actions && typeof actions.initHomePurchaseActions === "function") {
+      actions.initHomePurchaseActions();
+    }
   }
 
   if (eventReviewsList) {
@@ -222,3 +227,4 @@
 }
 
 initEventPage();
+

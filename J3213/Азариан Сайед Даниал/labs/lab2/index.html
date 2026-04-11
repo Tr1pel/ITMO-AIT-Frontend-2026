@@ -91,111 +91,9 @@
           <h2 class="h3 m-0">Мероприятия</h2>
           <a href="#" class="link-primary text-decoration-none d-none">Смотреть все</a>
         </div>
-        <div class="row g-4" id="eventsGrid">
-          <div class="col-sm-6 col-lg-4">
-            <article class="event-card h-100">
-              <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=800&q=80" class="event-card-img" alt="Симфонический концерт">
-              <div class="p-3">
-                <p class="small text-secondary mb-2">Концерт • 21 апреля • Москва</p>
-                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html?event=symphonic-cinema-night">Symphonic Cinema Night</a></h3>
-                <p class="text-secondary mb-3">Живой оркестр и музыка из легендарных фильмов в Vegas City Hall.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="fw-semibold">от 2 500 ₽</span>
-                  <button
-                    class="btn btn-sm btn-outline-primary buy-ticket-btn"
-                    type="button"
-                    data-event-name="Symphonic Cinema Night"
-                    data-category="Концерт"
-                    data-date="21 апреля 2026"
-                    data-date-iso="2026-04-21"
-                    data-city="Москва"
-                    data-seat="Сектор B, ряд 3, место 10"
-                    data-price="2500"
-                  >
-                    Купить
-                  </button>
-                </div>
-              </div>
-            </article>
-          </div>
-          <div class="col-sm-6 col-lg-4">
-            <article class="event-card h-100">
-              <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80" class="event-card-img" alt="Концерт">
-              <div class="p-3">
-                <p class="small text-secondary mb-2">Концерт • 14 мая • Москва</p>
-                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html?event=neon-lights-live">Neon Lights Live</a></h3>
-                <p class="text-secondary mb-3">Большое сольное шоу на ВТБ Арене.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="fw-semibold">от 1 900 ₽</span>
-                  <button
-                    class="btn btn-sm btn-outline-primary buy-ticket-btn"
-                    type="button"
-                    data-event-name="Neon Lights Live"
-                    data-category="Концерт"
-                    data-date="14 мая 2026"
-                    data-date-iso="2026-05-14"
-                    data-city="Москва"
-                    data-seat="Сектор A, ряд 4, место 12"
-                    data-price="1900"
-                  >
-                    Купить
-                  </button>
-                </div>
-              </div>
-            </article>
-          </div>
-          <div class="col-sm-6 col-lg-4">
-            <article class="event-card h-100">
-              <img src="https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=800&q=80" class="event-card-img" alt="Театр">
-              <div class="p-3">
-                <p class="small text-secondary mb-2">Театр • 18 мая • Санкт-Петербург</p>
-                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html?event=hamlet-new-stage">Гамлет: Новая сцена</a></h3>
-                <p class="text-secondary mb-3">Современная постановка в Александринском театре.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="fw-semibold">от 1 200 ₽</span>
-                  <button
-                    class="btn btn-sm btn-outline-primary buy-ticket-btn"
-                    type="button"
-                    data-event-name="Гамлет: Новая сцена"
-                    data-category="Театр"
-                    data-date="18 мая 2026"
-                    data-date-iso="2026-05-18"
-                    data-city="Санкт-Петербург"
-                    data-seat="Партер, ряд 2, место 8"
-                    data-price="1200"
-                  >
-                    Купить
-                  </button>
-                </div>
-              </div>
-            </article>
-          </div>
-          <div class="col-sm-6 col-lg-4">
-            <article class="event-card h-100">
-              <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80" class="event-card-img" alt="Спорт">
-              <div class="p-3">
-                <p class="small text-secondary mb-2">Спорт • 25 мая • Казань</p>
-                <h3 class="h5"><a class="text-decoration-none text-dark" href="event.html?event=city-league-final">Финал Лиги Городов</a></h3>
-                <p class="text-secondary mb-3">Решающий матч сезона на Ак Барс Арене.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="fw-semibold">от 1 500 ₽</span>
-                  <button
-                    class="btn btn-sm btn-outline-primary buy-ticket-btn"
-                    type="button"
-                    data-event-name="Финал Лиги Городов"
-                    data-category="Спорт"
-                    data-date="25 мая 2026"
-                    data-date-iso="2026-05-25"
-                    data-city="Казань"
-                    data-seat="Сектор C, ряд 6, место 18"
-                    data-price="1500"
-                  >
-                    Купить
-                  </button>
-                </div>
-              </div>
-            </article>
-          </div>
+        <div class="row g-4" id="eventsGrid"></div>
+        <div class="mt-3" id="eventsStatus">
+          <div class="alert alert-light border mb-0">Загружаем мероприятия...</div>
         </div>
       </div>
     </section>
@@ -259,6 +157,10 @@
     crossorigin="anonymous"
   ></script>
   <script src="JS/common.js"></script>
+  <script src="JS/home.data.js"></script>
+  <script src="JS/home.organizers.js"></script>
+  <script src="JS/home.ui.js"></script>
+  <script src="JS/home.actions.js"></script>
   <script src="JS/home.js"></script>
 </body>
 </html>

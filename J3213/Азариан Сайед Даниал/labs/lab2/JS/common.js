@@ -1,63 +1,106 @@
-﻿const STORAGE_USERS_KEY = "eventpass_users";
-const STORAGE_CURRENT_USER_KEY = "eventpass_current_user";
+﻿const STORAGE_CURRENT_USER_KEY = "eventpass_current_user";
+const STORAGE_CURRENT_USER_SESSION_KEY = "eventpass_current_user_session";
+const STORAGE_REMEMBER_ME_KEY = "eventpass_remember_me";
+const STORAGE_REMEMBERED_USER_KEY = "eventpass_remembered_user";
 const API_BASE_URL = "http://localhost:3000";
 
-function readJSON(key, fallback) {
+function getCurrentUserId() {
+  const localUserId = localStorage.getItem(STORAGE_CURRENT_USER_KEY);
+  if (localUserId) {
+    return localUserId;
+  }
+
+  return sessionStorage.getItem(STORAGE_CURRENT_USER_SESSION_KEY);
+}
+
+function isRememberMeEnabled() {
+  return (
+    localStorage.getItem(STORAGE_REMEMBER_ME_KEY) === "1" ||
+    !!localStorage.getItem(STORAGE_CURRENT_USER_KEY)
+  );
+}
+
+function setCurrentUserId(userId, options) {
+  const rememberMe = !!(options && options.rememberMe);
+  const normalizedUserId = String(userId);
+
+  if (rememberMe) {
+    localStorage.setItem(STORAGE_CURRENT_USER_KEY, normalizedUserId);
+    localStorage.setItem(STORAGE_REMEMBER_ME_KEY, "1");
+    sessionStorage.removeItem(STORAGE_CURRENT_USER_SESSION_KEY);
+    return;
+  }
+
+  sessionStorage.setItem(STORAGE_CURRENT_USER_SESSION_KEY, normalizedUserId);
+  localStorage.removeItem(STORAGE_CURRENT_USER_KEY);
+  localStorage.removeItem(STORAGE_REMEMBER_ME_KEY);
+  localStorage.removeItem(STORAGE_REMEMBERED_USER_KEY);
+}
+
+function setRememberedUser(user) {
   try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : fallback;
+    localStorage.setItem(STORAGE_REMEMBERED_USER_KEY, JSON.stringify(sanitizeUser(user)));
   } catch (error) {
-    return fallback;
+    // Ignore serialization/storage errors, login should still work.
   }
 }
 
-function loadUsers() {
-  return readJSON(STORAGE_USERS_KEY, []);
-}
+function getRememberedUser() {
+  const raw = localStorage.getItem(STORAGE_REMEMBERED_USER_KEY);
+  if (!raw) {
+    return null;
+  }
 
-function saveUsers(users) {
-  localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
-}
-
-function getCurrentUserId() {
-  return localStorage.getItem(STORAGE_CURRENT_USER_KEY);
-}
-
-function setCurrentUserId(userId) {
-  localStorage.setItem(STORAGE_CURRENT_USER_KEY, userId);
+  try {
+    return sanitizeUser(JSON.parse(raw));
+  } catch (error) {
+    localStorage.removeItem(STORAGE_REMEMBERED_USER_KEY);
+    return null;
+  }
 }
 
 function clearCurrentUserId() {
   localStorage.removeItem(STORAGE_CURRENT_USER_KEY);
+  localStorage.removeItem(STORAGE_REMEMBER_ME_KEY);
+  localStorage.removeItem(STORAGE_REMEMBERED_USER_KEY);
+  sessionStorage.removeItem(STORAGE_CURRENT_USER_SESSION_KEY);
 }
 
-function getCurrentUser() {
+async function getCurrentUser() {
   const userId = getCurrentUserId();
-  if (!userId) return null;
+  if (!userId) {
+    return null;
+  }
 
-  const users = loadUsers();
-  return users.find((user) => String(user.id) === String(userId)) || null;
+  try {
+    const user = await apiRequest(`/users/${encodeURIComponent(String(userId))}`);
+    const safeUser = sanitizeUser(user);
+
+    if (isRememberMeEnabled()) {
+      localStorage.setItem(STORAGE_REMEMBER_ME_KEY, "1");
+      setRememberedUser(safeUser);
+    }
+
+    return safeUser;
+  } catch (error) {
+    if (error && error.status === 404) {
+      clearCurrentUserId();
+      return null;
+    }
+
+    if (isRememberMeEnabled()) {
+      const rememberedUser = getRememberedUser();
+      if (rememberedUser && String(rememberedUser.id) === String(userId)) {
+        return rememberedUser;
+      }
+    }
+
+    return null;
+  }
 }
 
 function getCabinetUrlForUser(user) {
   return user && user.accountType === "organizer" ? "organizer.html" : "profile.html";
-}
-
-function updateStoredUser(updatedUser) {
-  const users = loadUsers();
-  const nextUsers = users.map((user) => (String(user.id) === String(updatedUser.id) ? updatedUser : user));
-  saveUsers(nextUsers);
-}
-
-function upsertUserInStorage(user) {
-  const users = loadUsers();
-  const targetIndex = users.findIndex((item) => String(item.id) === String(user.id));
-  if (targetIndex >= 0) {
-    users[targetIndex] = user;
-  } else {
-    users.push(user);
-  }
-  saveUsers(users);
 }
 
 function sanitizeUser(user) {
@@ -81,7 +124,10 @@ async function apiRequest(path, options) {
 
   if (!response.ok) {
     const message = payload && payload.message ? payload.message : "Ошибка запроса к API.";
-    throw new Error(message);
+    const apiError = new Error(message);
+    apiError.status = response.status;
+    apiError.payload = payload;
+    throw apiError;
   }
 
   return payload;
@@ -136,8 +182,20 @@ async function persistUserToApi(user) {
   });
 
   const safeUser = sanitizeUser(savedUser);
-  upsertUserInStorage(safeUser);
+  if (isRememberMeEnabled()) {
+    setRememberedUser(safeUser);
+  }
+
   return safeUser;
+}
+
+async function getOrganizerUsersFromApi() {
+  const users = await apiRequest("/users?accountType=organizer");
+  if (!Array.isArray(users)) {
+    return [];
+  }
+
+  return users.map((user) => sanitizeUser(user));
 }
 
 function generateId(prefix) {
@@ -152,4 +210,3 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
-

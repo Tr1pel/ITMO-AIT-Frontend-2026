@@ -42,3 +42,16 @@ npm run build
 ```sh
 npm run lint
 ```
+
+---
+
+Для запуска БД
+
+```
+npx json-server --watch db.json --port 3000
+```
+
+Для запуска хоста
+```
+npm start
+```

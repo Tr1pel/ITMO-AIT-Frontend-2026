@@ -3,8 +3,6 @@ import { apiLogin, apiRegister } from '../api/auth'
 import { getUserById, updateUser } from '../api/users'
 
 const STORAGE_CURRENT_USER_KEY = 'eventpass_current_user'
-const STORAGE_CURRENT_USER_SESSION_KEY = 'eventpass_current_user_session'
-const STORAGE_REMEMBER_ME_KEY = 'eventpass_remember_me'
 const STORAGE_REMEMBERED_USER_KEY = 'eventpass_remembered_user'
 
 const currentUser = ref(null)
@@ -20,11 +18,11 @@ function sanitizeUser(user) {
 }
 
 function getStoredCurrentUserId() {
-  return localStorage.getItem(STORAGE_CURRENT_USER_KEY) || sessionStorage.getItem(STORAGE_CURRENT_USER_SESSION_KEY)
+  return localStorage.getItem(STORAGE_CURRENT_USER_KEY) || sessionStorage.getItem(STORAGE_CURRENT_USER_KEY)
 }
 
 function isRememberMeEnabled() {
-  return localStorage.getItem(STORAGE_REMEMBER_ME_KEY) === '1' || !!localStorage.getItem(STORAGE_CURRENT_USER_KEY)
+  return !!localStorage.getItem(STORAGE_CURRENT_USER_KEY)
 }
 
 function setRememberedUser(user) {
@@ -50,22 +48,19 @@ function setCurrentUserId(userId, rememberMe) {
 
   if (rememberMe) {
     localStorage.setItem(STORAGE_CURRENT_USER_KEY, normalizedUserId)
-    localStorage.setItem(STORAGE_REMEMBER_ME_KEY, '1')
-    sessionStorage.removeItem(STORAGE_CURRENT_USER_SESSION_KEY)
+    sessionStorage.removeItem(STORAGE_CURRENT_USER_KEY)
     return
   }
 
-  sessionStorage.setItem(STORAGE_CURRENT_USER_SESSION_KEY, normalizedUserId)
+  sessionStorage.setItem(STORAGE_CURRENT_USER_KEY, normalizedUserId)
   localStorage.removeItem(STORAGE_CURRENT_USER_KEY)
-  localStorage.removeItem(STORAGE_REMEMBER_ME_KEY)
   localStorage.removeItem(STORAGE_REMEMBERED_USER_KEY)
 }
 
 function clearCurrentUserId() {
   localStorage.removeItem(STORAGE_CURRENT_USER_KEY)
-  localStorage.removeItem(STORAGE_REMEMBER_ME_KEY)
   localStorage.removeItem(STORAGE_REMEMBERED_USER_KEY)
-  sessionStorage.removeItem(STORAGE_CURRENT_USER_SESSION_KEY)
+  sessionStorage.removeItem(STORAGE_CURRENT_USER_KEY)
 }
 
 function getCabinetRouteForUser(user) {
@@ -90,7 +85,6 @@ export function useAuth() {
       currentUser.value = user
 
       if (isRememberMeEnabled()) {
-        localStorage.setItem(STORAGE_REMEMBER_ME_KEY, '1')
         setRememberedUser(user)
       }
 
